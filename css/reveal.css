@@ -5,6 +5,16 @@
  *
  * Copyright (C) 2015 Hakim El Hattab, http://hakim.se
  */
+ 
+ /*********************************************
+ * Omat tyylit
+ *********************************************/
+ 
+ p.normal {
+	font-family: "Times New Roman", Times, serif;
+	font-size:14px;
+}
+ 
 /*********************************************
  * RESET STYLES
  *********************************************/
