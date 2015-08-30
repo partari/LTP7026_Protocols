@@ -42,10 +42,10 @@
 			<div class="slides">
 				<section>
 					<h1>Protokollat</h1>
-					<h2>Internet Protokolla</h2>
-					<h2>TCP Protokolla</h2>
+
 					<ul>
-						<li><a href="#/2">Internet Protokolla</a></li>
+						<li><a href="#/1">Internet Protokolla</a></li>
+						<li><a href="#/4">TCP-Protokolla</a></li>
 					</ul>
 					<p>
 						<small>Risto Partanen</a></small>
@@ -54,16 +54,107 @@
 
 				<section>
 				
-					<h2>Internet Protokolla</h2>
+					<h2>Internet-Protokolla</h2>
 
-					<p>Internet Protokolla on ehkäpä kaikkein tärkein protokolla, koska kaikki muut protokollat hyödyntävät sitä. </br>
+					<p class="normal">Internet-Protokolla on ehkäpä kaikkein tärkein protokolla, koska kaikki muut protokollat hyödyntävät sitä. </br>
 					IP-protokolla ei luo varsinaista yhteyttä kahden laitteen välillä, joten sitä kutsutaan yhteydettömäksi protokollaksi. </br>
 					Yhteydetön protokolla tarkoittaa, että IP-protokolla ei huolehdi siitä onko paketti varmasti on saapunut pisteestä A pisteeseen B? </br>
+					</br>
 					Tietyissä tilanteissa IP-protokolla "hyödyntää" myös ICMP protokollaa, mutta nämä ovat lähinnä tapauksia joissa IP paketin siirrossa on tapahtunut jokin virhe ja siitä pitää saada tieto lähettäjälle. </br>
 					</p> 
 					</br>
-					<img src="/Images/IP_Packet.gif" alt="HTML5 Icon" style="width:161px;height:278px;">
+					<img src="./Images/IP_Packet.gif" alt="" style="width:616px;height:278px;background:none; border:none; box-shadow:none;">
+					
+					<p class="normal">Kuvassa näkyy IP-protokollan paketti, jossa tärkeimmät kentät ovat "Source IP Address" ja "Destination IP Address".</p> 
 
+				</section>
+				<section>
+				
+					<h4>Kuinka dataa sitten käsitellään IP protokollaa hyödyntäen?</h4>
+					<div style="width: 560px; float: left;">
+						<img src="./Images/IP_Transportation.gif" alt="" style="width:550px;height:484px;background:none; border:none; box-shadow:none;">
+					</div>
+					<div style="margin-left: 565px;">
+						</br>
+						<ul class="normal">
+							<li>Sovelluskerroksessa olevalla sovelluksella on jotakin dataa jota se haluaa lähettää eteenpäin. Esimerkiksi vaikka NodeJS socket.write(data)</li></br></br>
+							<li>Kuljetuskerroksessa tuo lähetettävä data paketoidaan joko käyttämällä TCP-protokollaa tai sitten UDP-protokollaa?</li></br></br>
+							<li>Internetkerroksessa data + tcp paketoidaan IP-protokollan mukaiseen IP-pakettiin ja lähetetään fyysiselle kerrokselle kuljetettavaksi</li></br>
+							<li>Fyysisessä kerroksessa data + tcp + ip paketoidaan fyysisen kerroksen kehykseen ja kehys liikkuu verkkopiuhoissa eteenpäin.</li></br>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<h4>Summary</h4>
+					<p class="normal">
+					Käytännössä siis kaikki muut protokollat jotka "keskustelevat" verkon välityksellä tukeutuvat IP-protokollaan!</br>
+					</br>
+					Ohjelmoijalle tärkeää on tietää että mistä koneesta ja mihin koneeseen paketti on menossa, eli mikä on kohdekoneen osoite?</br>
+					Kaikki tämä tieto (lähettävän ja vastaanottavan koneen osoite) on mukana IP-protokollan mukaisessa IP-paketissa, kuten ensimmäisen sivun kuvasta voidaan päätellä.</br>
+					</br>
+					Oikeastaan, tästä tiedosta ohjelmalta ei tule kuin sen kohdekoneen osoite, koska alustakoneen tiedot täytetään pakettia luodessa.</br>
+					Joten ohjelman tarvitsee siis vähintään tietää että mihin IP-osoitteeseen tuo kyseinen datapaketti halutaan lähettää (määritellään koodissa).</br>
+				</section>
+				
+				<section>
+				<h2>TCP-Protokolla</h2>
+
+					<p class="normal">
+					TCP-protokollan tehtävänä on huolehtia että yhteys on varmasti luotettava ja että yksikään siirretty bitti kahden laitteen välillä ei häviä.
+					TCP-protokolla luo yhteyden kahden koneen välille ja on siis yhteydellinen protokolla.</br></br>
+					Yhteydellisyys tarkoittaa, että TCP-protokolla huolehtii yhteden ensin pystyyn ja huolehtii myös siitä että yhtään bittiä ei häviä yhteyden aikana.</br></br>
+					Yhteyden muodostaminen tapahtuu hyödyntäen ns. kolmivaiheista kättelyä, josta on kuva alla:</p>
+					
+					<div style="width: 520px; float: left;">
+						<img src="./Images/tcp_handshake.jpg" alt="" style="width:515px;height:342px;background:none; border:none; box-shadow:none;">
+					</div>
+					<div style="margin-left: 565px;">
+						</br>
+						<ul class="normal">
+							<li>Client haluaa jutella palvelimen (server) kanssa (SYN-sanoma lähetetään palvelimelle).</li></br></br>
+							<li>Palvelin kuittaa keskustelunavauksen SYN-ACK -sanomalla ja on valmis luomaan yhteyden omassa päässään.</li></br></br>
+							<li>Client vastaanottaa SYN-ACK -sanoman ja avaa yhteyden omassa päässä, sekä lähettää ACK -sanoman palvelimelle.</li></br>
+							<li>Palvelin vastaanottaa ACK-sanoman ja avaa yhteyden.</li>
+						</ul>
+						
+					</div>
+					<p class="normal"></br>
+						Tärkein ominaisuus TCP-protokollassa on yhteyden luonnin lisäksi, myös pakettien häviämättömyyden huolehtiminen johon kättely antaa aloituksen.</br>
+					</p>
+				</section>
+				<section>
+				<h2>Datan siirtäminen TCP-protokollalla</h2>
+
+					<p class="normal">
+					Kun sovellus haluaa lähettää dataa hyödyntämällä TCP-protokollaa, määritellään silloin sovelluksessa lähettävä ja vastaanottava portti.
+					Toisin kuin IP-protokollassa, TCP-protkollassa ei siis määritetä kohdekoneen tai lähettävän koneen IP-osoitetta, vaan nyt käytetään portteja.
+					Kohdekoneen ja lähettävän koneen IP-osoitteista huolehtiminen jää IP-protokollalle, jonka sisälle TCP-protokollan paketti laitetaan. </br>
+					</br>
+					Alla on kuva TCP-Protokollan paketista: </p>
+					<img src="./Images/TCP_Packet.jpg" alt="" style="width:516px;height:209px;background:none; border:none; box-shadow:none;">
+					
+					<p class="normal">
+					Pakettien järjestys on siis, kun sovellus haluaa lähettää dataa: 
+					</p>
+					<ul class="normal">
+							<li>Sovelluksen data laitetaan TCP-protokollan pakettiin.</li>
+							<li>TCP-pakettiin  määritellään kohdekoneen porttinumero + vastaanottavan koneen porttinumero.</li>
+							<li>TCP-paketti jossa on data + lähdekoneen porttinumero + kohdekoneen porttinumero laitetaan IP-pakettiin.</li>
+							<li>IP-paketti laitetaan verkkoon ns. ethernet kehyksessä.</li>
+						</ul>
+				</section>
+				<section>
+					<h4>Summary</h4>
+					<p class="normal">
+					Tässä meillä on IP-protokollan jälkeen yksi tärkeimmistä protokollista, kun puhutaan tiedon siirtämisestä verkon yli.</br>
+					Yhdessä IP-protokollan kanssa nämä kaksi protokollaa tuottavat TCP/IP protokollaperheen, joita melkein kaikki muut protokollat hyödyntävät.</br>
+					</br>
+					Yhdessä nämä 2 protokollaa (TCP ja IP) siis huolehtivat siitä että data matkaa verkossa kahden koneen välillä käyttäen IPv4 tai IPv 6 osoitteita
+					ja että data saavuttaa kohdekoneessa sen portin johon sen oletetaan saapuvan.
+					</br></br>
+					Myös NodeJS hyödyntää näitä kahta protokollaa, silloin kun luodaan palvelu ja otetaan palveluun yhteys käyttäen HTTP-protokollaa.
+					</p>
+					
 				</section>
 			</div>
 		</div>
