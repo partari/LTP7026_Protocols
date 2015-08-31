@@ -61,11 +61,12 @@
 					Yhteydetön protokolla tarkoittaa, että IP-protokolla ei huolehdi siitä onko paketti varmasti on saapunut pisteestä A pisteeseen B? </br>
 					</br>
 					Tietyissä tilanteissa IP-protokolla "hyödyntää" myös ICMP protokollaa, mutta nämä ovat lähinnä tapauksia joissa IP paketin siirrossa on tapahtunut jokin virhe ja siitä pitää saada tieto lähettäjälle. </br>
+					Lähinnä tiedottamisen tekevät verkossa IP-pakettien kuljetuksesta vastaavat aktiivilaitteet.
 					</p> 
 					</br>
 					<img src="./Images/IP_Packet.gif" alt="" style="width:616px;height:278px;background:none; border:none; box-shadow:none;">
 					
-					<p class="normal">Kuvassa näkyy IP-protokollan paketti, jossa tärkeimmät kentät ovat "Source IP Address" ja "Destination IP Address".</p> 
+					<p class="normal">Kuvassa näkyy IP-protokollan paketti, jossa tärkeimmät (ohjelmoijan/ohjelman kannalta) kentät ovat "Source IP Address" ja "Destination IP Address".</p> 
 
 				</section>
 				<section>
@@ -78,9 +79,10 @@
 						</br>
 						<ul class="normal">
 							<li>Sovelluskerroksessa olevalla sovelluksella on jotakin dataa jota se haluaa lähettää eteenpäin. Esimerkiksi vaikka NodeJS socket.write(data)</li></br></br>
-							<li>Kuljetuskerroksessa tuo lähetettävä data paketoidaan joko käyttämällä TCP-protokollaa tai sitten UDP-protokollaa?</li></br></br>
-							<li>Internetkerroksessa data + tcp paketoidaan IP-protokollan mukaiseen IP-pakettiin ja lähetetään fyysiselle kerrokselle kuljetettavaksi</li></br>
-							<li>Fyysisessä kerroksessa data + tcp + ip paketoidaan fyysisen kerroksen kehykseen ja kehys liikkuu verkkopiuhoissa eteenpäin.</li></br>
+							<li>Kuljetuskerroksessa tuo lähetettävä data paketoidaan joko käyttämällä TCP-protokollaa tai sitten UDP-protokollaa (jompikumpi)</li></br></br>
+							<li>Internetkerroksessa DATA + TCP paketoidaan IP-protokollan mukaiseen IP-pakettiin ja lähetetään fyysiselle kerrokselle kuljetettavaksi</li></br>
+							<li>Fyysisessä kerroksessa DATA + TCP + IP paketoidaan fyysisen kerroksen kehykseen (frame) ja kehys liikkuu verkkopiuhoissa eteenpäin.</li></br>
+							<li>Vastaanottavassa päässä kaikki tapahtuu päinvastaisessa järjestyksessä hyödyntäen IP-osoitetta johon data on menossa.</li></br>
 						</ul>
 					</div>
 				</section>
@@ -119,7 +121,7 @@
 						
 					</div>
 					<p class="normal"></br>
-						Tärkein ominaisuus TCP-protokollassa on yhteyden luonnin lisäksi, myös pakettien häviämättömyyden huolehtiminen johon kättely antaa aloituksen.</br>
+						Tärkein ominaisuus TCP-protokollassa on yhteyden luonnin lisäksi, myös pakettien häviämättömyydestä huolehtiminen johon kättely antaa aloituksen.</br>
 					</p>
 				</section>
 				<section>
@@ -137,10 +139,11 @@
 					Pakettien järjestys on siis, kun sovellus haluaa lähettää dataa: 
 					</p>
 					<ul class="normal">
-							<li>Sovelluksen data laitetaan TCP-protokollan pakettiin.</li>
-							<li>TCP-pakettiin  määritellään kohdekoneen porttinumero + vastaanottavan koneen porttinumero.</li>
-							<li>TCP-paketti jossa on data + lähdekoneen porttinumero + kohdekoneen porttinumero laitetaan IP-pakettiin.</li>
-							<li>IP-paketti laitetaan verkkoon ns. ethernet kehyksessä.</li>
+							<li>Sovelluksen DATA laitetaan TCP-protokollan pakettiin.</li>
+							<li>TCP-pakettiin  määritellään lähdekoneen porttinumero + kohdekoneen porttinumero.</li>
+							<li>TCP-paketti jossa on DATA + lähdekoneen porttinumero + kohdekoneen porttinumero laitetaan IP-pakettiin.</li>
+							<li>IP-paketti laitetaan verkkoon ns. ethernet kehyksessä (frame).</li>
+							<li>Vastaanottavassa päässä kaikki tapahtuu päinvastaisessa järjestyksessä hyödyntäen porttinumeroa johon DATA on menossa.</li>
 						</ul>
 				</section>
 				<section>
